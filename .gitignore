@@ -1,1 +1,4 @@
 *.dbmdl
+/Backend/ScrummersSalesApi.Backend.Products.Db/ScrummersSalesApi.Backend.Products.Db.jfm
+/Backend/ScrummersSalesApi.Backend.Products.Db/Tisur.Mobile.Backend.Db.jfm
+/Backend/ScrummersSalesApi.Backend.Products.Db/Tisur.Mobile.Backend.Db.sqlproj.bak
