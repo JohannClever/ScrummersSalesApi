@@ -1,61 +1,93 @@
 # ScrummersSalesApi
-This is a Sales microservice api
-# Scrummers Sales API (Products Service)
+
+This is a Sales microservices API.
+
+---
+
+# Scrummers Sales API (Products and Orders Services)
 
 ## Overview
-This project is a backend service built with **C#** and **.NET 8**.  
-It is designed following **Domain-Driven Design (DDD) principles**, applying a layered architecture that separates concerns between Domain, Application, Infrastructure, and API.
+This solution contains two backend microservices built with **C#** and **.NET 8**:  
+- **Products Service** → manages the product catalog.  
+- **Orders Service** → manages sales orders and validates against Products.  
 
-The service currently runs on **Windows environments** and exposes a set of APIs for managing **Products**.
+The project follows **Domain-Driven Design (DDD) principles** with a layered architecture that separates **Domain**, **Application**, **Infrastructure**, and **API**.
 
 ---
 
 ## Architecture
 - **Domain Layer**  
-  Contains the core business entities, value objects, and interfaces. The domain is technology-agnostic and represents the business rules.
+  Contains core business entities, value objects, and interfaces (business rules).  
 
 - **Application Layer**  
-  Coordinates the application workflow. Uses **MediatR** to implement **CQRS** (Command and Query Responsibility Segregation).  
-  - **Queries** → executed with **Dapper** for fast, lightweight data retrieval.  
-  - **Commands** → executed with **Entity Framework Core** (EF) for data manipulation (insert, update, delete).
+  Coordinates workflows using **MediatR** to implement **CQRS**.  
+  - Queries → with **Dapper** for fast reads.  
+  - Commands → with **Entity Framework Core** for persistence.  
 
 - **Infrastructure Layer**  
-  Handles persistence, repository implementations, EF configurations, and external services.  
-  It bridges the application and domain layers with the database and external systems.
+  Handles database persistence, repository implementations, EF configurations, and communication with external systems (e.g., Product service from Orders).  
 
 - **API Layer**  
-  Exposes RESTful endpoints using **ASP.NET Core Web API**.  
-  Controllers delegate requests to **MediatR handlers**, which dispatch to services in the Application layer.
+  Exposes RESTful endpoints via **ASP.NET Core Web API**. Controllers delegate requests to MediatR handlers.  
 
 ---
 
 ## Key Technologies
 - **.NET 8**
 - **ASP.NET Core Web API**
-- **Entity Framework Core** (for commands)
-- **Dapper** (for queries)
-- **MediatR** (for CQRS and request/response handling)
-- **SQL Server** as the database
-- **Serilog** for structured logging
+- **Entity Framework Core** (commands)
+- **Dapper** (queries)
+- **MediatR** (CQRS)
+- **SQL Server** (database)
+- **Polly + IHttpClientFactory** (resilient inter-service communication)
+- **Serilog** (structured logging)
 
 ---
 
 ## Current Status
-- ✅ Runs locally on **Windows** with Visual Studio or `dotnet run`.
-- ✅ Database connection via **SQL Server Express**.
-- ✅ Layered architecture with **DDD focus**.  
-- ✅ Commands implemented with **EF Core**.  
-- ✅ Queries implemented with **Dapper**.  
-- ✅ **MediatR** integration for CQRS.  
-- ⏳ **Docker support is not yet available**. A Dockerfile and containerization setup are currently under development.
+- ✅ Runs locally on **Windows** with Visual Studio or `dotnet run`.  
+- ✅ **Products Service** and **Orders Service** run independently.  
+- ✅ Products ↔ Orders integration via **HTTP + Polly**.  
+- ⏳ **Docker support is not yet complete**. A Dockerfile and containerization setup are under development.  
 
 ---
 
-## How to Run
-1. Clone the repository.
-2. Ensure you have **.NET 8 SDK** installed.
-3. Configure your database connection string in `appsettings.json`.
-4. Run migrations or apply SQL scripts for initial schema.
-5. Start the API:
-   ```bash
-   dotnet run --project ScrummersSalesApi.Backend.Products.Api
+## How to Run Locally (Visual Studio)
+
+1. **Clone the repository.**
+
+2. **Configure your database connection strings.**  
+   - Open `appsettings.json` in each microservice (`Products.Api`, `Orders.Api`).  
+   - Update the `"ConnectionStrings:database"` key to point to your SQL Server instance. Example:
+     ```json
+     "ConnectionStrings": {
+       "database": "Server=localhost\\SQLEXPRESS;Database=Products;Trusted_Connection=True;Encrypt=False;"
+     }
+     ```
+
+3. **Run the microservices in order:**
+   - Start **Products Service** first.  
+   - Then start **Orders Service** (it depends on Products for stock/price validation).  
+
+4. **Test the endpoints (recommended order):**
+   - Use Swagger (auto-enabled) at `/swagger`.  
+   - First test **GET all** methods:  
+     - `/Products`  
+     - `/api/orders`  
+   - Once you confirm data is available, test POST and PUT methods.  
+
+5. **Running from Visual Studio:**  
+   - Right-click the API project (`ScrummersSalesApi.Backend.Products.Api` or `ScrummersSalesApi.Backend.Orders.Api`).  
+   - Select **Set as Startup Project**.  
+   - Run with **F5** or **Ctrl+F5**.  
+
+6. **Seed Data:**  
+   Both services include **seeders** to create initial tables and insert sample data on first run.  
+
+---
+
+## Next Steps
+- Add full Docker support with Compose to orchestrate Products + Orders + SQL Server.  
+- Add integration tests across services.  
+- Implement authentication/authorization between services.  
+

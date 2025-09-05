@@ -1,0 +1,64 @@
+trigger:
+  branches:
+    include:
+      - producción
+
+variables:
+  - group: ORDER TISUR BACKEND PRODUCCION
+  - name: ORDER BACKEND PRODUCCION
+    
+stages:
+- stage: 'Build'
+  displayName: 'Build the web application'
+  
+  jobs:
+  - job: 'Build'
+    displayName: 'Build job'
+
+    pool:
+      vmImage: 'windows-latest' 
+
+    steps:
+    
+    - task: replacetokens@5
+      inputs:
+        targetFiles: '**/ScrummersSalesApi.Backend.Orders.Api/appsettings.json'
+        encoding: 'auto'
+        tokenPattern: 'azpipelines'
+        writeBOM: true
+        actionOnMissing: 'warn'
+        keepToken: false
+        actionOnNoFiles: 'continue'
+        enableTransforms: false
+        enableRecursion: false
+        useLegacyPattern: false
+        enableTelemetry: true
+          
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: 'dotnet restore $(patch-compiler)'
+      displayName: 'Restore API Project'
+
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: 'dotnet build $(patch-compiler) --configuration Release --runtime $(type-runtime)'
+      displayName: 'Build API Project' 
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        publishWebProjects: true
+        arguments: '--configuration Release --runtime $(type-runtime) --self-contained -o $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: false
+        modifyOutputPath: false
+      displayName: 'Publish API Project'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: 'OrderBackendArtifacts'  
+        publishLocation: 'Container'
+      displayName: 'Publish Artifacts'
+              
