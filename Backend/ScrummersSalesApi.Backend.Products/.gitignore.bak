@@ -1,0 +1,24 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/Tisur.Mobile.Backendt.Api/bin/Debug/net6.0
+/Tisur.Mobile.Backend.Api/obj
+/Tisur.Mobile.Backend.Api/Tisur.Mobile.Backend.Api.csproj.user
+/Tisur.Mobile.Backend.Domain/bin/Debug/net6.0
+/Tisur.Mobile.Backend.Domain/obj
+/Tisur.Mobile.Backend.Infrastructure/bin/Debug/net6.0
+/Tisur.Mobile.Backend.Infrastructure/obj
+/Tisur.Mobile.Backend.Db/bin/Debug
+/Tisur.Mobile.Backend.Db/obj/Debug
+/Tisur.Mobile.Backendt.Db/Tisur.Mobile.Backend.Db.sqlproj.user
+/Tisur.Mobile.Backend.Db/Tisur.Mobile.Backend.Db.jfm
+/Tisur.Mobile.Backend.Db/Tisur.Mobile.Backend.Db.dbmdl
+/Tisur.Mobile.Backend.Db/Syspotec.ErrorReport.Db.jfm
+/Tisur.Mobile.Backend.Api/bin/Debug/net6.0/runtimes
+/Tisur.Mobile.Backend.Api/bin/Debug/net6.0
+/Tisur.Mobile.Backend.Api/bin/Release/net6.0
+/Tisur.Mobile.Backend.Domain/bin/Release/net6.0
+/Tisur.Mobile.Backend.Infrastructure/bin/Release/net6.0
+logs/
