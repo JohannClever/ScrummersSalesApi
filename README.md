@@ -86,8 +86,15 @@ The project follows **Domain-Driven Design (DDD) principles** with a layered arc
 
 ---
 
+## Documentation
+
+- **[Payment Gateway Design](docs/PaymentGatewayDesign.md)** - Comprehensive design document for implementing a payment processing system with multiple gateway support (Stripe, PayPal, Cash). Includes architecture diagrams, code examples, security considerations, and integration guidelines.
+
+---
+
 ## Next Steps
 - Add full Docker support with Compose to orchestrate Products + Orders + SQL Server.  
 - Add integration tests across services.  
 - Implement authentication/authorization between services.  
+- Implement payment gateway integration (see [Payment Gateway Design](docs/PaymentGatewayDesign.md)).
 
